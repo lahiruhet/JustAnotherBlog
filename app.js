@@ -1,9 +1,10 @@
+require('dotenv').config()
 const express = require('express')
 const morgan = require('morgan')
 const blog = require('./models/blogs')
 const bodyParser = require('body-parser')
 const app = express()
-const dbconnect = 'mongodb+srv://lahiru:40870ananda@cluster0.3xdbpb5.mongodb.net/?retryWrites=true&w=majority'
+const dbconnect = process.env.DBURI
 const mongoose = require('mongoose')
 mongoose.connect(dbconnect,{useNewUrlParser:true,useUnifiedTopology:true})
 .then((result)=>console.log('connected to db'))
@@ -11,7 +12,7 @@ mongoose.connect(dbconnect,{useNewUrlParser:true,useUnifiedTopology:true})
 
 
 app.set('view engine','ejs')
-app.listen(3000)
+app.listen(3000,()=>console.log('Listening from Port 3000'))
 app.use(morgan('tiny'))
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
@@ -22,7 +23,8 @@ app.get('/',(req,res)=>{
 })
 
 app.get('/blogs',(req,res)=>{
-    blog.find().then(result=>res.send(result)).catch(err=>console.log(err))
+    blog.find().then(result=>res.render('blogs',{blogs:result})).catch(err=>console.log(err))
+    
 })
 
 app.get('/about',(req,res)=>{
@@ -38,6 +40,18 @@ app.post('/form',(req,res)=>{
     newBlog.save().then(result=>res.send(result)).catch(err=>console.log(err))
 })
 
+app.get(('/blogs/:id'),(req,res)=>{
+    const blogId = req.params.id
+    blog.findById(blogId).then(result=>{res.render('singleBlog',{blogData:result})}).catch(err=>console.log(err))
+
+})
+app.delete(('/blogs/:id'),(req,res)=>{
+    const blogId = req.params.id
+    blog.findByIdAndDelete(blogId).then(result=>{res.json({redirect:'/blogs'})}).catch(err=>console.log(err))
+
+})
+
 app.use((req,res)=>{
     res.status(404).render('404')}
     )
+

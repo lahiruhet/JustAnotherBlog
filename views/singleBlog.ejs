@@ -1,0 +1,22 @@
+<%- include ('./partials/head') %>
+<body>
+  <%- include('./partials/navbar') %>
+  <div class="singleBlogContainer">
+    <h1 class="title"><%= blogData.title %></h1>
+    <p class="author"><%= blogData.author %></p>
+    <h4 class="body"><%= blogData.body %></h4>
+    <a onclick="sendBlogID('<%= blogData._id %>')">DELETE</a>
+  </div>
+  <script>
+    function sendBlogID(blogID) {
+      fetch(`/blogs/${blogID}`, {
+        method: "DELETE",
+      })
+        .then((response) => response.json())
+        .then((data) => (window.location.href = data.redirect))
+        .catch((error) => {
+          console.error("Error:", error);
+        });
+    }
+  </script>
+</body>

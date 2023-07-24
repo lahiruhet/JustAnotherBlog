@@ -6,14 +6,13 @@
     <div class="blogContainer">
         <h1 class="">What others have to say..</h1>
         <div class="blog">
-            <h2 class="text-title">Title</h1>
-            <p class="text-body">
-                Lorem, ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus accusamus, corrupti, voluptas molestiae minus dolorem ipsa error maxime nemo voluptate ullam quidem voluptates quia, illum perferendis doloribus provident asperiores quisquam?
-            </p>
-            <h2 class="text-title">Title</h1>
-            <p class="text-body">
-                Lorem, ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus accusamus, corrupti, voluptas molestiae minus dolorem ipsa error maxime nemo voluptate ullam quidem voluptates quia, illum perferendis doloribus provident asperiores quisquam?
-            </p>
+        <% blogs.map(blog=>{ %>
+            <a href="/blogs/<%= blog._id %>">
+                <h2 class="title"><%=blog.title%></h1>
+                <p class="author"><%=blog.author%></p>
+                <p class="body"><%=blog.body%></p>
+            </a>
+        <% }) %> 
         </div>
     </div>
 </body>
